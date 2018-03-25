@@ -60,7 +60,7 @@ sbt coverage test
 sbt coverageReport
 ```
 
-## Packgae a service
+## Package a service
 
 ```bash
 sbt universal:packageBin

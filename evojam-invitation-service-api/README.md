@@ -8,7 +8,7 @@ This SBT module is being built in 3 configuration using cross-compilation:
 The purpose is to support old legacy systems that are using our API and have not switched yet to Scala 2.12.x.
 
 Invitation service uses REST interface to receive and persist all initiations in the internal database (H2 by default).
-Due to that fact there are some internal rules the client of the API is obliged to obey.
+Due to that fact there are some internal rules that the client of the API is obliged to obey.
 Invitation JSON object consists of two fields: invitee, email
 
 Example:

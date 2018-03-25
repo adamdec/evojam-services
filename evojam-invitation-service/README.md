@@ -14,6 +14,17 @@ Run with custom `application.conf`:
 
 ## Run in Docker
 
+If application is to be run locally in Docker then one needs to replace the ip address (localhost) with the one which is assigned to the Docker container.
+To check that please invoke:
+```bash
+docker ps
+docker inspect <CONTAINER ID>
+```
+At the bottom, under "NetworkSettings", one can find "IPAddress".
+If one uses cntlm as a proxy please not forget to exclude Docker container subnet in '/etc/cntlm.conf':
+```text
+NoProxy         localhost, 127.0.0.*, 172.17.0.*, 10.*.*.*
+```
 ### Locally
 DOCKER_REGISTRY=localhost
 DOCKER_REGISTRY_PROJECT_NAME=evojam
@@ -60,36 +71,74 @@ docker run -d \
 
 ## API Documentation
 
+Service REST endpoints are documented using Swagger (https://swagger.io/).
+
 ### Add new invitation
+
+HTTP
 ```bash
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"invitee" : "Adam Dec", "email" : "adec@evojam.com"}' -u admin:admin http://localhost:8080/v1/invitation
+```
+HTTPS
+```bash
+curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"invitee" : "Adam Dec", "email" : "adec@evojam.com"}' -u admin:admin https://localhost:9080/v1/invitation --insecure
+```
+#### Example response when invitation is persisted
+```text
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 201 Created
+Server: akka-http/10.1.0
+Date: Sun, 25 Mar 2018 09:10:44 GMT
+Content-Type: text/plain; charset=UTF-8
+Content-Length: 76
 ```
 
 ### Get all invitations sorted by 'invitee' field
 
+HTTP
 ```bash
 curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET -u admin:admin http://localhost:8080/v1/invitation
 ```
-#### Docker
-If application is to be run locally in Docker then one needs to replace the ip address (localhost) with the one which is assigned to the Docker container.
-To check that please invoke:
+HTTPS
 ```bash
-docker ps
-docker inspect <CONTAINER ID>
-```
-At the bottom, under "NetworkSettings", one can find "IPAddress".
-If one uses cntlm as a proxy please not forget to exclude Docker container subnet in '/etc/cntlm.conf':
-```text
-NoProxy         localhost, 127.0.0.*, 172.17.0.*, 10.*.*.*
+curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET -u admin:admin https://localhost:9080/v1/invitation --insecure
 ```
 
-#### SSL
+#### Example response when invitations are not found
+```text
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 404 Not Found
+Server: akka-http/10.1.0
+Date: Sun, 25 Mar 2018 09:08:30 GMT
+Content-Type: application/json
+Content-Length: 104
+
+{"message":"No invitations were found in DB","uri":"https://172.17.0.2:9080/v1/invitation","cause":null}
+```
+#### Example response when invitations are found
+```text
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 200 OK
+Server: akka-http/10.1.0
+Date: Sun, 25 Mar 2018 09:11:43 GMT
+Content-Type: application/json
+Content-Length: 66
+
+{"invitations":[{"invitee":"Adam Dec","email":"adec@evojam.com"}]}
+```
+
+Please note that:
+- charset=UTF-8 does not to be included in the Content-Type HTTP header (https://www.iana.org/assignments/media-types/application/json)
+
+### SSL
 If SSL is enabled, one needs to add '--insecure' as a parameter to curl. This is only for testing purposes!
 
 ### Static information
 
-The static information is available without authentication so that potential users of the service 
-can review the docs at the start of any possible use of the service.
+The static information is available without authentication so that potential users of the service can review the docs at the start of any possible use of the service.
 
 - http://localhost:8080/api-docs/swagger.json
 - http://localhost:8080/api-docs/swagger.yaml
@@ -125,3 +174,4 @@ GRANT UNLIMITED TABLESPACE TO invitations;
 ```
 
 Then specify `invitations` as username and password when starting the service.
+
