@@ -127,6 +127,7 @@ Content-Length: 104
 {"message":"No invitations were found in DB","uri":"https://172.17.0.2:9080/v1/invitation","cause":null}
 ```
 #### Example response when invitations are found
+
 ```text
 HTTP/1.1 200 Connection established
 
@@ -138,6 +139,92 @@ Content-Length: 66
 
 {"invitations":[{"invitee":"Adam Dec","email":"adec@evojam.com"}]}
 ```
+### Application healthcheck
+
+- Check if application is alive
+- Check if DB connection is healthy
+- Return service up-time
+
+HTTP
+```bash
+curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET -u admin:admin http://localhost:8080/healthcheck
+```
+HTTPS
+```bash
+curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET -u admin:admin https://localhost:9080/healthcheck --insecure
+```
+
+#### Response
+```text
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 200 OK
+Server: akka-http/10.1.0
+Date: Sun, 25 Mar 2018 09:46:38 GMT
+Content-Type: application/json
+Content-Length: 417
+```
+```json
+{
+   "build": {
+      "licenses": "List()",
+      "name": "evojam-invitation-service",
+      "teamPage": "https://wiki.evojam/evojam-invitation-service",
+      "projectUrl": "https://bitbucket.evojam/evojam-services/evojam-invitation-service",
+      "scalaVersion": "2.12.5",
+      "version": "1.0.0",
+      "teamEmail": "dl-EVOJAM-TEAMevojam.com",
+      "sbtVersion": "0.13.17",
+      "team": "EVOJAM TEAM"
+   },
+   "database": {
+      "connectivity": "OK",
+      "version": "001"
+   },
+   "metrics": {
+      "uptime": "00:38:18.393"
+   }
+}
+```
+
+### Application simple healthcheck
+
+- The purpose of the simple health check is only to indicate if the application is up & running. DB connection is not checked. 
+This can be freely used for example by Kubernetes (OpenShift) to check the service health. If the service is down Kubernetes (OpenShift) can reconfigure its's load balancer and spawn additional services if needed.
+
+HTTP
+```bash
+curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET -u admin:admin http://localhost:8080/
+```
+HTTPS
+```bash
+curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET -u admin:admin https://localhost:9080/ --insecure
+```
+
+#### Response
+```text
+HTTP/1.1 200 Connection established
+
+HTTP/1.1 200 OK
+Server: akka-http/10.1.0
+Date: Sun, 25 Mar 2018 09:49:41 GMT
+Content-Type: application/json
+Content-Length: 322
+```
+```json
+{
+   "licenses": "List()",
+   "name": "evojam-invitation-service",
+   "teamPage": "https://wiki.evojam/evojam-invitation-service",
+   "projectUrl": "https://bitbucket.evojam/evojam-services/evojam-invitation-service",
+   "scalaVersion": "2.12.5",
+   "version": "1.0.0",
+   "teamEmail": "dl-EVOJAM-TEAMevojam.com",
+   "sbtVersion": "0.13.17",
+   "team": "EVOJAM TEAM"
+}
+```
+
 
 Please note that:
 - charset=UTF-8 does not to be included in the Content-Type HTTP header (https://www.iana.org/assignments/media-types/application/json)

@@ -23,6 +23,7 @@ Service supports:
 - Endpoint contract versioning
 	- all endpoints are prefixed with "/v1/" so one can easily determine which version of the API is invoked
 	- minimizes the risk of "breaking changes" in already implemented endpoints
+- Simple & advanced health checking
 
 By default, application will:
 - start on 0.0.0.0:8080
