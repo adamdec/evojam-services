@@ -1,0 +1,1 @@
+resolvers := Resolver.url("Internal sbt plugin", new URL("https://ninja-nexus.oneadr.net/nexus/content/repositories/sbt-plugin-releases/"))(Resolver.ivyStylePatterns) +: resolvers.value
