@@ -41,6 +41,10 @@ See documentation [here](evojam-invitation-service/README.md).
 
 Project uses SBT 0.13.7 for SDLC (please note that 1.1.0 should also work).
 
+Please check SBT resolvers, configures at: $WORKSPACE/evojam-services/project/build.sbt
+
+Unfortunately due to my VPN restrictions I am not able to test if those are working :(
+
 ## Compile and package components
 
 ```bash

@@ -1,1 +1,4 @@
-resolvers := Resolver.url("Internal sbt plugin", new URL("https://ninja-nexus.oneadr.net/nexus/content/repositories/sbt-plugin-releases/"))(Resolver.ivyStylePatterns) +: resolvers.value
+resolvers ++= Seq(
+    "Typesafe" at "http://repo.typesafe.com/typesafe/releases/",
+    "Java.net Maven2 Repository" at "http://download.java.net/maven/2/"
+)
