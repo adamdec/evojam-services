@@ -14,22 +14,29 @@ Run with custom `application.conf`:
 
 ## Run in Docker
 
-If application is to be run locally in Docker then one needs to replace the ip address (localhost) with the one which is assigned to the Docker container.
-To check that please invoke:
+If application is to be run in Docker (still locally) then one needs to replace the ip address (localhost) with the one which is assigned currently to the Docker container.
+To check that, please invoke the commands:
 ```bash
 docker ps
 docker inspect <CONTAINER ID>
 ```
 At the bottom, under "NetworkSettings", one can find "IPAddress".
-If one uses cntlm as a proxy please not forget to exclude Docker container subnet in '/etc/cntlm.conf':
+
+If one uses cntlm (or any) as a proxy please not forget to exclude Docker container subnet in '/etc/cntlm.conf':
 ```text
 NoProxy         localhost, 127.0.0.*, 172.17.0.*, 10.*.*.*
 ```
-### Locally
-DOCKER_REGISTRY=localhost
-DOCKER_REGISTRY_PROJECT_NAME=evojam
+### Docker running locally
 
-Please note that the first step should be to create a 
+Please replace:
+- DOCKER_REGISTRY=localhost
+- DOCKER_REGISTRY_PROJECT_NAME=evojam
+
+Please note that the first step should be to create a Docker image.
+To check if one is there in local repository, please invoke the command:
+```bash
+docker images
+```
 
 Run with default configuration:
 ```bash
@@ -71,7 +78,7 @@ docker run -d \
 
 ## API Documentation
 
-Service REST endpoints are documented using Swagger (https://swagger.io/).
+Service REST endpoints are documented using Swagger (https://swagger.io/). Below you will find example queries that can be executed using curl.
 
 ### Add new invitation
 
@@ -84,6 +91,7 @@ HTTPS
 curl -i -H "Accept: application/json" -H "Content-Type:application/json" -X POST --data '{"invitee" : "Adam Dec", "email" : "adec@evojam.com"}' -u admin:admin https://localhost:9080/v1/invitation --insecure
 ```
 #### Example response when invitation is persisted
+
 ```text
 HTTP/1.1 200 Connection established
 
@@ -106,6 +114,7 @@ curl -i -H "Accept: application/json" -H "Content-Type: application/json" -X GET
 ```
 
 #### Example response when invitations are not found
+
 ```text
 HTTP/1.1 200 Connection established
 
@@ -145,7 +154,7 @@ The static information is available without authentication so that potential use
 
 ### Swagger UI
 
-The ability to execute the service through Swagger is restricted so that it only works when the user is properly authenticated.
+The ability to execute the service through the Swagger is restricted so that it only works when the user is properly authenticated.
 
 - http://localhost:8080/swagger
 

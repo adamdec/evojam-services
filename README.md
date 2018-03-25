@@ -4,7 +4,8 @@ Invitation service as a micro-service can be run:
 - using run scripts, Linux & Windows versions are provided in a zip file: evojam-invitation-service-1.0.0.zip (please check 'bin' directory as per SBT Universal plugin convention).
 - using Docker infrastructure (setup of the Docker must be done before it)
 
-Services uses:
+Service uses:
+- Scala 2.12.x as a language of first choice
 - Akka HTTP as a REST interface
 - Swagger for endpoint documentation
 - Slick as a persistence layer
@@ -19,6 +20,9 @@ Service supports:
 - Logging of incoming requests and outcoming responses
 	- log file: invitation-service.log
 	- console
+- Endpoint contract versioning
+	- all endpoints are prefixed with "/v1/" so one can easily determine which version of the API is invoked
+	- minimizes the risk of "breaking changes" in already implemented endpoints
 
 By default, application will:
 - start on 0.0.0.0:8080
